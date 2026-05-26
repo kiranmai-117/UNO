@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UNO UI</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+/* Players (Top Left) */
+.players {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 14px;
+}
+
+.player.active {
+  border: 2px solid #4CAF50;
+}
+
+.player .icon {
+  width: 30px;
+  height: 30px;
+  background: #ddd;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Center Area */
+.center-area {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Pile */
+.pile {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 0 auto;
+}
+
+/* Deck */
+.deck {
+  position: absolute;
+  right: -120px;
+  top: 0;
+  width: 80px;
+  height: 120px;
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* Bottom Area */
+.bottom-area {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Player Hand */
+.hand {
+  display: flex;
+  gap: 12px;
+}
+
+/* Cards */
+.card {
+  width: 60px;
+  height: 90px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+/* UNO Button */
+.uno-btn {
+  position: absolute;
+  right: 30px;
+  bottom: 25px;
+  padding: 10px 16px;
+  background: #ff5252;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Players -->
+<div class="players">
+  <div class="player active">
+    <div class="icon"></div>
+    You (Player 1)
+  </div>
+  <div class="player">
+    <div class="icon"></div>
+    Player 2
+  </div>
+</div>
+
+<!-- Center -->
+<div class="center-area">
+  <div class="pile"></div>
+  <div class="deck"></div>
+</div>
+
+<!-- Bottom -->
+<div class="bottom-area">
+  <div class="hand">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+  </div>
+</div>
+
+<!-- UNO Button -->
+<button class="uno-btn">UNO</button>
+
+</body>
+</html>

@@ -204,40 +204,51 @@ export default function App() {
             <div>Connected: {connected ? "Yes" : "No"}</div>
           </div>
 
-          <div className="board-row">
-            <PlayerSummary
-              players={roomState?.players || []}
-              currentPlayerIndex={roomState?.currentPlayerIndex || 0}
-            />
-            <GameBoard topCard={roomState?.discardTop} />
-          </div>
-
-          <div className="controls">
-            <div>
-              Current turn:{" "}
-              <strong>{currentPlayer?.name || "Waiting..."}</strong>
+          <div className="game-page">
+            <div className="players">
+              <PlayerSummary
+                players={roomState?.players || []}
+                currentPlayerIndex={roomState?.currentPlayerIndex || 0}
+              />
             </div>
-            <button onClick={handleDraw} disabled={!isGameReady}>
-              Draw
-            </button>
-            <button onClick={handleUno} disabled={!showUno}>
+
+            <div className="center-area">
+              <div className="pile">
+                <GameBoard topCard={roomState?.discardTop} />
+              </div>
+              <div className="deck">
+                <div className="deck-count">
+                  {roomState?.drawPileCount || 0}
+                </div>
+                <div>Draw Deck</div>
+              </div>
+              <div className="center-label">
+                <div>Current turn</div>
+                <div className="current-player-name">
+                  <strong>{currentPlayer?.name || "Waiting..."}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="bottom-area">
+              {isGameReady ? (
+                <PlayerHand
+                  hand={hand}
+                  onPlay={(cardId) => {
+                    const card = hand.find((c) => c.id === cardId);
+                    handlePlay(cardId, card?.type);
+                  }}
+                />
+              ) : (
+                <div className="waiting-pane">
+                  Waiting for second player to join...
+                </div>
+              )}
+            </div>
+            <button className="uno-btn" onClick={handleUno} disabled={!showUno}>
               UNO
             </button>
           </div>
-
-          {isGameReady ? (
-            <PlayerHand
-              hand={hand}
-              onPlay={(cardId) => {
-                const card = hand.find((c) => c.id === cardId);
-                handlePlay(cardId, card?.type);
-              }}
-            />
-          ) : (
-            <div className="waiting-pane">
-              Waiting for second player to join...
-            </div>
-          )}
         </>
       )}
     </div>
