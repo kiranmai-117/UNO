@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+import Card from "./Card";
 
 export default function GameBoard({ topCard }) {
-  if (!topCard) return <div className="board">No cards yet</div>
+  if (!topCard) return <div className="board">No cards yet</div>;
   return (
     <div className="board">
       <h3>Top Discard</h3>
-      <div className={`card ${topCard.color || ''}`}>{topCard.type === 'number' ? topCard.value : topCard.type}</div>
+      <Card card={topCard} />
     </div>
-  )
+  );
 }

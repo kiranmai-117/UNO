@@ -1,6 +1,6 @@
 export function saveGame(game) {
   try {
-    const key = 'uno_mvp1'
+    const key = 'uno_mvp2'
     localStorage.setItem(key, JSON.stringify(game))
   } catch (e) {
     console.warn('saveGame failed', e)
@@ -9,7 +9,7 @@ export function saveGame(game) {
 
 export function loadGame() {
   try {
-    const key = 'uno_mvp1'
+    const key = 'uno_mvp2'
     const raw = localStorage.getItem(key)
     if (!raw) return null
     return JSON.parse(raw)

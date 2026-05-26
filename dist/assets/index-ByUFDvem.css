@@ -1,1 +1,0 @@
-body{font-family:system-ui,Arial,sans-serif;margin:16px}.app{max-width:900px;margin:0 auto}.hand{display:flex;gap:8px;margin-top:12px}.card{padding:12px;border-radius:8px;border:1px solid #ccc;min-width:60px;text-align:center;cursor:pointer}.card.red{background:#fdd}.card.green{background:#dfd}.card.blue{background:#ddf}.card.yellow{background:#ffd}.board{margin-bottom:12px}

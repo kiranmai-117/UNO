@@ -1,14 +1,5 @@
-import React from 'react'
-
-function Card({ c, onPlay }) {
-  const label = c.type === 'number' ? c.value : c.type
-  return (
-    <div className={`card ${c.color || ''}`} onClick={() => onPlay(c.id)}>
-      <div>{label}</div>
-      <div style={{ fontSize: 10 }}>{c.color}</div>
-    </div>
-  )
-}
+import React from "react";
+import Card from "./Card";
 
 export default function PlayerHand({ hand, onPlay }) {
   return (
@@ -16,9 +7,9 @@ export default function PlayerHand({ hand, onPlay }) {
       <h3>Your Hand</h3>
       <div className="hand">
         {hand.map((c) => (
-          <Card key={c.id} c={c} onPlay={onPlay} />
+          <Card key={c.id} card={c} onPlay={onPlay} />
         ))}
       </div>
     </div>
-  )
+  );
 }
