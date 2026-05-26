@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { createServer } from 'node:http'
 import { WebSocketServer } from 'ws'
-import { startGame, playCard, drawCard, callUno } from '../src/game/engine.js'
+import { startGame, playCard, drawCard, callUno, isValidPlay } from '../src/game/engine.js'
 
 const app = new Hono()
 app.use('*', async (c, next) => {
@@ -86,6 +86,12 @@ function findRoomBySocket(ws) {
 
 function findPlayerBySession(room, sessionId) {
   return room?.players?.find((player) => player.sessionId === sessionId)
+}
+
+function playerHasValidPlay(game, playerId) {
+  const player = game.players[playerId]
+  if (!player) return false
+  return player.hand.some((card) => isValidPlay(card, game.discardTop))
 }
 
 app.post('/api/create-room', async (c) => {
@@ -209,20 +215,44 @@ wss.on('connection', (ws) => {
     const player = findPlayerBySession(room, sessionId)
     if (!player) return sendToSocket(ws, 'error', { message: 'Invalid session' })
     if (!room.game) return sendToSocket(ws, 'error', { message: 'Game has not started yet' })
+    const gamePlayer = room.game.players[player.playerId]
+    if (!gamePlayer) return sendToSocket(ws, 'error', { message: 'Player game state missing.' })
 
     if (type === 'play-card') {
+      if (room.game.currentPlayerIndex !== player.playerId) {
+        return sendToSocket(ws, 'error', { message: 'It is not your turn.' })
+      }
+      const card = gamePlayer.hand.find((c) => c.id === cardId)
+      if (!card) {
+        return sendToSocket(ws, 'error', { message: 'Card not found in hand.' })
+      }
+      if (!isValidPlay(card, room.game.discardTop)) {
+        return sendToSocket(ws, 'error', { message: 'Card cannot be played on the current discard.' })
+      }
       playCard(room.game, player.playerId, cardId, chosenColor)
       broadcastRoom(room)
       return
     }
 
     if (type === 'draw-card') {
+      if (room.game.currentPlayerIndex !== player.playerId) {
+        return sendToSocket(ws, 'error', { message: 'It is not your turn.' })
+      }
+      if (playerHasValidPlay(room.game, player.playerId)) {
+        return sendToSocket(ws, 'error', { message: 'You have a playable card and cannot draw.' })
+      }
       drawCard(room.game, player.playerId)
       broadcastRoom(room)
       return
     }
 
     if (type === 'call-uno') {
+      if (gamePlayer.hand.length !== 1) {
+        return sendToSocket(ws, 'error', { message: 'UNO can only be called when you have exactly one card.' })
+      }
+      if (room.game.unoPendingPlayer !== player.playerId) {
+        return sendToSocket(ws, 'error', { message: 'You cannot call UNO at this time.' })
+      }
       callUno(room.game, player.playerId)
       broadcastRoom(room)
       return
