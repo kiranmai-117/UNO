@@ -252,9 +252,28 @@ button {
   border: 1px solid #d1d5db;
 }
 
+
+.room-code-input {
+  margin-left: 10px;
+  min-width: 140px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #c6c6c6;
+  background: #f8fafc;
+  color: #111827;
+  font-weight: 700;
+  text-align: center;
+  user-select: all;
+}
+
+.room-code-input:focus {
+  outline: 2px solid #2563eb;
+}
+
 .game-page {
   position: relative;
   min-height: calc(100vh - 120px);
+  padding-top: 140px;
 }
 
 .players {
@@ -275,10 +294,10 @@ button {
 }
 
 .center-area {
-  position: absolute;
-  top: 52%;
+  position: relative;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -292,7 +311,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 56px;
+  margin-bottom: 72px;
 }
 
 .pile .board {
@@ -350,10 +369,11 @@ button {
 }
 
 .bottom-area {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 64px;
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  margin-top: 24px;
   padding: 0 24px;
   display: flex;
   justify-content: center;

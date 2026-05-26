@@ -204,8 +204,15 @@ export default function App() {
       ) : (
         <>
           <div className="room-info">
-            <div>
-              Room Code: <strong>{roomCode}</strong>
+            <div className="room-code-label">
+              Room Code:
+              <input
+                className="room-code-input"
+                value={roomCode}
+                readOnly
+                onFocus={(e) => e.target.select()}
+                onClick={(e) => e.target.select()}
+              />
             </div>
           </div>
 
@@ -229,16 +236,6 @@ export default function App() {
                 tabIndex={isGameReady && isPlayerTurn ? 0 : undefined}
               >
                 <div className="deck-label">UNO</div>
-              </div>
-              <div className="center-label">
-                <div>Current turn</div>
-                <div className="current-player-name">
-                  <strong>
-                    {currentPlayer?.id === playerId
-                      ? "You"
-                      : currentPlayer?.name || "Waiting..."}
-                  </strong>
-                </div>
               </div>
             </div>
 
