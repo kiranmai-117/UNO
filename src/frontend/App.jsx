@@ -26,6 +26,12 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!status) return;
+    const timer = setTimeout(() => setStatus(""), 10000);
+    return () => clearTimeout(timer);
+  }, [status]);
+
   const connectSocket = (roomIdValue, sessionIdValue, name) => {
     if (socketRef.current) {
       socketRef.current.close();
@@ -160,13 +166,14 @@ export default function App() {
 
   const isGameReady = roomState?.gameStarted;
   const currentPlayer = roomState?.players?.[roomState.currentPlayerIndex];
+  const isPlayerTurn = isGameReady && currentPlayer?.id === playerId;
   const showUno =
     isGameReady && roomState.unoPendingPlayer === playerId && hand.length === 1;
 
   return (
     <div className="app">
+      {status ? <div className="notification-banner">{status}</div> : null}
       <h1>UNO Multiplayer (MVP3)</h1>
-      <p>{status}</p>
 
       {!roomCode ? (
         <div className="lobby-form">
@@ -201,7 +208,6 @@ export default function App() {
             <div>
               Room Code: <strong>{roomCode}</strong>
             </div>
-            <div>Connected: {connected ? "Yes" : "No"}</div>
           </div>
 
           <div className="game-page">
@@ -209,6 +215,7 @@ export default function App() {
               <PlayerSummary
                 players={roomState?.players || []}
                 currentPlayerIndex={roomState?.currentPlayerIndex || 0}
+                selfId={playerId}
               />
             </div>
 
@@ -225,15 +232,22 @@ export default function App() {
               <div className="center-label">
                 <div>Current turn</div>
                 <div className="current-player-name">
-                  <strong>{currentPlayer?.name || "Waiting..."}</strong>
+                  <strong>
+                    {currentPlayer?.id === playerId
+                      ? "You"
+                      : currentPlayer?.name || "Waiting..."}
+                  </strong>
                 </div>
               </div>
             </div>
 
-            <div className="bottom-area">
+            <div
+              className={`bottom-area ${!isPlayerTurn ? "hand-disabled" : ""}`}
+            >
               {isGameReady ? (
                 <PlayerHand
                   hand={hand}
+                  disabled={!isPlayerTurn}
                   onPlay={(cardId) => {
                     const card = hand.find((c) => c.id === cardId);
                     handlePlay(cardId, card?.type);

@@ -8,17 +8,17 @@ const symbolLabel = {
   "wild+4": "+4",
 };
 
-export default function Card({ card, onPlay }) {
+export default function Card({ card, onPlay, disabled }) {
   const label =
     card.type === "number" ? card.value : symbolLabel[card.type] || card.type;
   const colorClass = card.color === "wild" ? "wild" : card.color;
 
   return (
     <div
-      className={`card ${colorClass}`}
-      onClick={onPlay ? () => onPlay(card.id) : undefined}
-      role={onPlay ? "button" : undefined}
-      tabIndex={onPlay ? 0 : undefined}
+      className={`card ${colorClass} ${disabled ? "card--disabled" : ""}`}
+      onClick={!disabled && onPlay ? () => onPlay(card.id) : undefined}
+      role={!disabled && onPlay ? "button" : undefined}
+      tabIndex={!disabled && onPlay ? 0 : undefined}
     >
       <div className="corner top-left">{label}</div>
       <div className="oval">
