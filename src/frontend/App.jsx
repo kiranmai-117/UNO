@@ -28,7 +28,7 @@ export default function App() {
 
   useEffect(() => {
     if (!status) return;
-    const timer = setTimeout(() => setStatus(""), 10000);
+    const timer = setTimeout(() => setStatus(""), 2000);
     return () => clearTimeout(timer);
   }, [status]);
 
@@ -173,7 +173,6 @@ export default function App() {
   return (
     <div className="app">
       {status ? <div className="notification-banner">{status}</div> : null}
-      <h1>UNO Multiplayer (MVP3)</h1>
 
       {!roomCode ? (
         <div className="lobby-form">
