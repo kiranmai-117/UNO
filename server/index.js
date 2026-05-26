@@ -5,11 +5,14 @@ import { startGame, playCard, drawCard, callUno } from '../src/game/engine.js'
 
 const app = new Hono()
 app.use('*', async (c, next) => {
+  const origin = c.req.headers.get('origin') || '*'
+  const allowedOrigin = origin.startsWith('http://localhost:') ? origin : 'http://localhost:5175'
+
   if (c.req.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
       headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       },
@@ -18,7 +21,7 @@ app.use('*', async (c, next) => {
 
   await next()
   const res = c.res || new Response(null, { status: 204 })
-  res.headers.set('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.headers.set('Access-Control-Allow-Origin', allowedOrigin)
   res.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.headers.set('Access-Control-Allow-Headers', 'Content-Type')
   return res
@@ -161,6 +164,18 @@ const server = createServer((req, res) => {
     })
 })
 const wss = new WebSocketServer({ server, path: '/ws' })
+
+server.on('error', (err) => {
+  console.error('Server error:', err)
+  if (err.code === 'EADDRINUSE') {
+    console.error('Port 3000 is already in use. Stop any running server or change the port.')
+  }
+  process.exit(1)
+})
+
+wss.on('error', (err) => {
+  console.error('WebSocketServer error:', err)
+})
 
 wss.on('connection', (ws) => {
   ws.on('message', (raw) => {
