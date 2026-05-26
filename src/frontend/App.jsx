@@ -222,11 +222,13 @@ export default function App() {
               <div className="pile">
                 <GameBoard topCard={roomState?.discardTop} />
               </div>
-              <div className="deck">
-                <div className="deck-count">
-                  {roomState?.drawPileCount || 0}
-                </div>
-                <div>Draw Deck</div>
+              <div
+                className={`deck ${isGameReady && isPlayerTurn ? "deck--active" : "deck--disabled"}`}
+                onClick={isGameReady && isPlayerTurn ? handleDraw : undefined}
+                role={isGameReady && isPlayerTurn ? "button" : undefined}
+                tabIndex={isGameReady && isPlayerTurn ? 0 : undefined}
+              >
+                <div className="deck-label">UNO</div>
               </div>
               <div className="center-label">
                 <div>Current turn</div>
