@@ -243,23 +243,29 @@ export default function App() {
               className={`bottom-area ${!isPlayerTurn ? "hand-disabled" : ""}`}
             >
               {isGameReady ? (
-                <PlayerHand
-                  hand={hand}
-                  disabled={!isPlayerTurn}
-                  onPlay={(cardId) => {
-                    const card = hand.find((c) => c.id === cardId);
-                    handlePlay(cardId, card?.type);
-                  }}
-                />
+                <>
+                  <PlayerHand
+                    hand={hand}
+                    disabled={!isPlayerTurn}
+                    onPlay={(cardId) => {
+                      const card = hand.find((c) => c.id === cardId);
+                      handlePlay(cardId, card?.type);
+                    }}
+                  />
+                  <button
+                    className="uno-btn"
+                    onClick={handleUno}
+                    disabled={!showUno}
+                  >
+                    UNO
+                  </button>
+                </>
               ) : (
                 <div className="waiting-pane">
                   Waiting for second player to join...
                 </div>
               )}
             </div>
-            <button className="uno-btn" onClick={handleUno} disabled={!showUno}>
-              UNO
-            </button>
           </div>
         </>
       )}
